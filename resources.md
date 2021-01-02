@@ -1,3 +1,4 @@
 ---
-Learning resources:
-
+layout: post
+title: Resources
+---
