@@ -1,4 +1,4 @@
 ---
-layout: post
-title: Content
+layout: page
+subtitle: Content
 ---
