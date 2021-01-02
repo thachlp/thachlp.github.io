@@ -9,12 +9,12 @@
 
 **Beautiful Jekyll** is a ready-to-use template to help you create a beautiful website quickly. Perfect for personal sites, blogs, or simple project websites.  [Check out a demo](https://beautifuljekyll.com) of what you'll get after just two minutes.  You can also look at [my personal website](https://deanattali.com) or [my consulting website](https://attalitech.com) to see it in use, or see [examples of websites](http://beautifuljekyll.com/examples) other people created using this theme.
 
-**If you enjoy Beautiful Jekyll, please consider [supporting me](https://github.com/sponsors/daattali) for over 5 years of development (and to unlock rewards!) ❤**
+**If you enjoy Beautiful Jekyll, please consider [supporting me](https://github.com/sponsors/daattali) for over 5 years of development (and to unlock rewards!)**
 
 ## Table of contents
 
 - [Features](#features)
-- [Sponsors 🏆](#sponsors)
+- [Sponsors](#sponsors)
 - [**Build your website in 3 steps**](#build-your-website-in-3-steps)
 - [Plans](#plans)
 - [Add your own content](#add-your-own-content)
@@ -41,7 +41,7 @@ Check out [*What's New?*](https://beautifuljekyll.com/updates/) to see the lates
 - **Photos support**: Any page can have a full-width cover photo and thumbnail.
 - **RSS**: An RSS feed is automatically created, so you can even host a podcast easily with Beautiful Jekyll.
 
-<h2 id="sponsors">Sponsors 🏆</h2>
+<h2 id="sponsors">Sponsors </h2>
 
 - [Matt Artist](https://mja00.dev/)
 - [\_hyp3ri0n](https://hyperiongray.com)
@@ -54,7 +54,7 @@ There's a very easy way to use this theme, and there's a hard way. For most peop
 
 ## The easy way (recommended!)
 
-Getting started is *literally* as easy as 1-2-3 :smile:
+Getting started is *literally* as easy as 1-2-3
 
 Scroll down to see the steps involved, but here is a 40-second video just as a reference as you work through the steps. If you don't already have a [GitHub account](https://github.com/join), you'll need to sign up.
 
