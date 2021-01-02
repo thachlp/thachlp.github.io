@@ -14,9 +14,10 @@ author: Thach Le
 # --- List of links in the navigation bar --- #
 
 navbar-links:
-  Content: "content"
+  Content List: "content"
   # Home: "https://thachlp.github.io/"
   Learning resources: "resources"
+  About me: "aboutme"
   #Resources:
   #  - Beautiful Jekyll: "https://beautifuljekyll.com"
   #  - Learn markdown: "https://www.markdowntutorial.com/"
