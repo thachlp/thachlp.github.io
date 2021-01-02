@@ -1,4 +1,3 @@
 ---
 layout: page
-subtitle: Content
 ---
