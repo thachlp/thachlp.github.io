@@ -6,8 +6,8 @@
 # --- Required options --- #
 
 # Name of website
-title: Thach Le
-description:
+# title: Thach Le
+# description:
 
 # Your name to show in the footer
 author: Thach Le
@@ -15,11 +15,13 @@ author: Thach Le
 # --- List of links in the navigation bar --- #
 
 navbar-links:
+  Content: "content"
+  # Home: "https://thachlp.github.io/"
   About Me: "aboutme"
   #Resources:
   #  - Beautiful Jekyll: "https://beautifuljekyll.com"
   #  - Learn markdown: "https://www.markdowntutorial.com/"
-  Author's home: "https://thachlp.github.io/"
+
 
 # --- Logo --- #
 
