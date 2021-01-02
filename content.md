@@ -1,1 +1,4 @@
-#Content
+---
+layout: post
+title: Content
+---
