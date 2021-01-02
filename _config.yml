@@ -6,7 +6,7 @@
 # --- Required options --- #
 
 # Name of website
-title: Stay hungry, stay fooled
+title: Thach Le
 
 # Your name to show in the footer
 author: Thach Le
@@ -14,9 +14,9 @@ author: Thach Le
 # --- List of links in the navigation bar --- #
 
 navbar-links:
-  Content List: "content"
+  # Content List: "content"
   # Home: "https://thachlp.github.io/"
-  Learning resources: "resources"
+  # Learning resources: "resources"
   About me: "aboutme"
   #Resources:
   #  - Beautiful Jekyll: "https://beautifuljekyll.com"
