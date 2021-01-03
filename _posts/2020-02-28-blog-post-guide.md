@@ -77,4 +77,4 @@ You can add notification, warning and error boxes like this:
 {: .box-error}
 **Error:** This is an error box.
 
-From [beautifuljekyll](https://beautifuljekyll.com/)
+_From_ [beautifuljekyll](https://beautifuljekyll.com/)
