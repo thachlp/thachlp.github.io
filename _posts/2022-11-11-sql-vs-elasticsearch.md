@@ -6,6 +6,7 @@ comments: true
 ---
 Although **SQL** and **Elasticsearch** have different terms for the way the data is organized (and different semantics), but their purpose is the same, so here is the mapping:
 ## Terminologies and data types
+
 | SQL       | Elasticsearch | Description                                                                                                                                                                              |
 |-----------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | database  | cluster       | In MySQL, database is used to represent a set of schema, a number of tables. <br/>In Elasticsearch a set of indices available are grouped in a cluster                                   |
