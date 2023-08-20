@@ -1,7 +1,9 @@
 ---
 layout: page
-subtitle: The only way to do great work is to love what you do
 ---
-I am an software engineer.<br/>
-This place will serve as a notebook, I will post my random thoughs, working experices here.<br/>
-Ping me if you have any question/concern about the content.<br/>
+I am a Software Engineer with a passion for all aspects of software development.
+This place will serve as a notebook, I will post my random thoughts, and working experiences here. 
+
+I hope you find these posts informative and inspiring.
+
+Please feel free to ping me or create an issue if you have any questions or concerns about the content.
