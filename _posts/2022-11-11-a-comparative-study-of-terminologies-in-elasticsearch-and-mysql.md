@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Terminologies with data type of Elasticsearch and SQL
+title: A Comparative Study of Terminologies in ElasticSearch and MySQL
 tags: [databases, elasticsearch]
 comments: true
 ---
