@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Understanding and Resolving Spring DatabufferLimitexception
+title: Understanding and Resolving Spring DataBufferLimitException
 tags: [Spring, Webflux]
 comments: true
 ---
