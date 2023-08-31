@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Understanding Collation in MySQL
-tags: [databases, collation]
+tags: [Databases, Collation]
 comments: true
 ---
 Collation rules in MySQL define the sequence in which characters are sorted and how they match. These rules are crucial for data retrieval, comparison, and sorting operations. The default collation in MySQL varies depending on the version you are using.

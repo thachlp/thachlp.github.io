@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Git revert commits from fork repository
-tags: [git]
+tags: [Git]
 comments: true
 ---
 I messed up my fork repository today, and I want to roll back commits so that it updates with the original repository. There are numerous ways to accomplish it; here is one:

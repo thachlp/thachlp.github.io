@@ -1,7 +1,7 @@
 ---
 layout: post
 title: A Comparative Study of Terminologies in ElasticSearch and MySQL
-tags: [databases, elasticsearch]
+tags: [Databases, Elasticsearch]
 comments: true
 ---
 Although **SQL** and **Elasticsearch** have different terms for the way the data is organized (and different semantics), but their purpose is the same, so here is the mapping:
