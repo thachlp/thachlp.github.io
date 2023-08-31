@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How to maintain Kafka client connectivity
-tags: [kafka, kafka client]
+tags: [Kafka, Kafka Client]
 comments: true
 ---
 When Kafka is running, I mean producer/consumer connected to server and published/subscribed messages normally, what happen when Kafka server is down?
