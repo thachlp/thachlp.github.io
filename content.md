@@ -4,6 +4,7 @@ layout: page
 
 | Date          | Title                                                       |
 |------------   |-------------------------------------------------------------|
+| 2023-08-30    | [Understanding L4 and L7 Load Balancing](https://thachlp.github.io/2023-10-29-understand-l4-and-l7-load-balancing/)      
 | 2023-08-30    | [Understanding and Resolving Spring DataBufferLimitException](https://thachlp.github.io/2023-08-30-understanding-and-resolving-spring-databufferlimitexception/)                           |
 | 2023-08-18    | [Understanding collation in MySQL](https://thachlp.github.io/2023-08-18-understanding-collation-in-mysql/)                            |
 | 2023-03-06    | [Git revert commits from fork repository](https://thachlp.github.io/2023-03-06-git-revert-commit-fork-repository/)                     |
