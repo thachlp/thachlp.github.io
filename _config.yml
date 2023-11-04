@@ -9,6 +9,7 @@ author: Thach Le
 navbar-links:
   Home: "https://thachlp.github.io/"
   Content: "content"
+  Mentoring Program: "mentoring-program"
   About me: "aboutme"
   #Resources:
   #  - Beautiful Jekyll: "https://beautifuljekyll.com"
