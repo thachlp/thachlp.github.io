@@ -10,7 +10,7 @@ navbar-links:
   Home: "https://thachlp.github.io/"
   Content: "content"
   Mentoring Program: "mentoring-program"
-  About me: "aboutme"
+  About me: "about-me"
   #Resources:
   #  - Beautiful Jekyll: "https://beautifuljekyll.com"
   #  - Learn markdown: "https://www.markdowntutorial.com/"
