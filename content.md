@@ -6,6 +6,7 @@ layout: page
 
 | Date       | Title                                                                                   |
 |------------|-----------------------------------------------------------------------------------------|
+| 2023-12-29 | [2023 Recap](https://thachlp.github.io/2023-12-29-2023-recap/) |
 | 2023-12-02 | [Experience working with NULL in MySQL](https://thachlp.github.io/2023-12-02-experience-working-with-null-in-mysql/) |
 | 2023-08-30 | [Understanding L4 and L7 Load Balancing](https://thachlp.github.io/2023-10-29-understand-l4-and-l7-load-balancing/) |
 | 2023-08-30 | [Understanding and Resolving Spring DataBufferLimitException](https://thachlp.github.io/2023-08-30-understanding-and-resolving-spring-databufferlimitexception/) |
