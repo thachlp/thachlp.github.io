@@ -5,7 +5,6 @@ tags: [Databases]
 comments: true
 ---
 ### Replication
-
 Replication means **keeping a copy of the same data** on multiple machines that are connected via a network. We assume that our dataset is small enough to hold a copy of the entire dataset. Benefits of replication include:
 
 - Reducing latency by keeping data geographically closer to users.
@@ -13,9 +12,7 @@ Replication means **keeping a copy of the same data** on multiple machines that 
 - Scaling out the number of machines that can serve read queries and thus increase read throughput.
 
 ### Leader and follower
-
 Each node that stores a copy of the database is call a replica, every write to the database needs to be processed by every replica. The most common solution for this is called leader-based replication (master-slave replication):
-
 1. One of the replicas is designed the leader, when clients want to write to the database, they must send their requests to the leader, which first writes the new data to its local storage.
 2. The other replicas are known as followers, whenever the leader writes new data to its local storage, it also sends the data change to all of its followers as part of a replication log.
 3. When a client wants to read from the database, it can query either the leader or any of the followers, however, writes are only accepted on the leader.
@@ -127,7 +124,6 @@ Query OK, 0 rows affected, 1 warning (0.02 sec)
 Now we have mysql-cluster with 1 master and muti slaves. We can test the replication by create a table on master and see the data has replicated to slaves.
 
 ### Proxy
-
 From the application's perspective, it is typically necessary to manually handle the routing of read and write requests to the master or slave databases. In the event of a master failure and the subsequent election of a new master, the application may need to update its configuration to point to the new master, which can lead to downtime.
 
 In a practical environment, a proxy is often used to manage requests. Tools such as Orchestrator, MySQL Router, ProxySQL, and Percona Replication Manager can automate the process of redirecting requests, detecting master failures, and promoting a slave to master. These tools help to minimize downtime by providing a seamless transition during failover events.
@@ -164,5 +160,4 @@ The diagram below illustrates this setup:
 In an upcoming post, I plan to install ProxySQL and conduct some tests to verify this setup.
 
 **References:** 
-
 - *Leaders and Followers, Chapter 5: Replication, in “Designing Data-Intensive Applications”* by **Martin Kleppman**
