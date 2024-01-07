@@ -2,6 +2,7 @@
 layout: page
 ---
 ## Content
+
 | Date     | Title                                                                                   |
 |----------|-----------------------------------------------------------------------------------------|
 |2024-01-07| [Database Replication in MySQL](https://thachlp.github.io/2024-01-07-database-replication-in-mysql/) |
