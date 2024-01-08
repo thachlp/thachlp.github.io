@@ -65,7 +65,7 @@ docker run --name mysql-master \
   -e MYSQL_ROOT_PASSWORD=123456 \
   -p 3307:3306 \
   -d mysql:latest \
-  --server-id=1 # it is important for uniquely identifying each server in the cluster
+  --server-id=1 \ # it is important for uniquely identifying each server in the cluster
   --log-bin=mysql-bin
  
 #Config the master database
