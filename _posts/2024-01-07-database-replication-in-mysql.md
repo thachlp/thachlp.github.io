@@ -69,7 +69,7 @@ docker run --name mysql-master \
   --log-bin=mysql-bin
  
 #Config the master database
-docker exec -it mysql-docker mysql -uroot -p123456
+docker exec -it mysql-master mysql -uroot -p123456
 mysql> CREATE USER 'replicator'@'%' IDENTIFIED WITH 'mysql_native_password' BY '123456';
 mysql> GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'%';
 mysql> FLUSH PRIVILEGES; 
