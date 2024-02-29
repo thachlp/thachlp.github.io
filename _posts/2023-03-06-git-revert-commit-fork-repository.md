@@ -4,11 +4,24 @@ title: Git revert commits from fork repository
 tags: [Git]
 comments: true
 ---
-I messed up my fork repository today, and I want to roll back commits so that it updates with the original repository. There are numerous ways to accomplish it; here is one:
-#### Make sure you are on master branch
-1. `git remote add original https://github.com/xxx`
-2. `git fetch original`
-3. `git reset --hard original/master`
-4. `git push --force origin master`
+Sometimes, while working on a forked repository, you might find yourself needing to revert your repository to match the upstream repository (the original repository from which you forked). Whether you made a mistake or just need to synchronize with the latest changes, you can do this without losing your contributions on GitHub. Here's a step-by-step guide to help you through the process.
 
-Cheer!
+#### Step 1: ensure you are on the main/master branch
+#### Step 2: add the original repository as a remote
+```bash
+git remote add original https://github.com/thachlp/centraldogma.git
+```
+#### Step 3: fetch the latest changes
+```bash
+git fetch original
+```
+#### Step 4: reset your local branch to match the original repository
+```bash
+git reset --hard original/main
+```
+Be cautious with this step, as it will overwrite your local changes in the current branch. Ensure you have committed or stashed any work you want to keep before executing this command.
+#### Step 5: force push to your fork
+```bash
+git push --force origin main
+```
+This step will overwrite the hisotry on your forked repository's remote branch.
