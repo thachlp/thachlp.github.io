@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Understanding L4 and L7 Load Balancing
-tags: [Load Balancer]
+tags: [LoadBalancer]
 comments: true
 ---
 
