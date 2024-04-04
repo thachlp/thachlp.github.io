@@ -1,7 +1,7 @@
 ---
 layout: post
 title: My Journey with Composite Indexes in MySQL
-tags: [Databases, Composite Index]
+tags: [Databases, CompositeIndex]
 comments: true
 ---
 
