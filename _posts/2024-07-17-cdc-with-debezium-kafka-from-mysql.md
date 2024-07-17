@@ -16,6 +16,5 @@ This approach helps me monitor the results more easily.
 You can reference the consumer source code [here](https://github.com/thachlp/cdc-debezium-service/tree/main/cdc-debezium-consumer)
 
 #### Learn more:
-https://debezium.io/documentation/reference/2.7/index.html
-
-https://www.infoq.com/presentations/data-streaming-kafka-debezium/
+[https://debezium.io/documentation/reference/2.7/index.html](https://debezium.io/documentation/reference/2.7/index.html)
+[https://www.infoq.com/presentations/data-streaming-kafka-debezium/](https://www.infoq.com/presentations/data-streaming-kafka-debezium/)
