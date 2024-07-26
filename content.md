@@ -5,6 +5,7 @@ layout: page
 
 | Date       | Title                                                                                                                                                                    |
 |------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 2024-07-26 | [Beautiful log test on Gradle](https://thachlp.github.io/2024-07-26-beautiful-log-test-on-gradle/)                                                                      |
 | 2024-07-17 | [Change Capture Data using Apache Kafka & Debezium from MySQL](https://thachlp.github.io/2024-07-17-cdc-with-debezium-kafka-from-mysql/)                                      |
 | 2024-01-07 | [Database Replication in MySQL](https://thachlp.github.io/2024-01-07-database-replication-in-mysql/)                                                                     |
 | 2023-12-29 | [2023 Recap](https://thachlp.github.io/2023-12-29-2023-recap/)                                                                                                           |
