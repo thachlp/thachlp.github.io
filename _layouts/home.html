@@ -103,3 +103,33 @@ layout: page
   {% endif %}
 </ul>
 {% endif %}
+
+{%- comment -%}
+Cozy bot: include script only on home layout.
+Use either page.cozy_bot_script (URL) or page.cozy_bot_inline (raw HTML/JS). If not set on page, fall back to site.cozy_bot_script or site.cozy_bot_inline.
+{%- endcomment -%}
+{%- assign cozy_script_url = page.cozy_bot_script | default: site.cozy_bot_script -%}
+{%- assign cozy_inline = page.cozy_bot_inline | default: site.cozy_bot_inline -%}
+{%- if cozy_script_url -%}
+<script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
+<script>
+    new CozeWebSDK.WebChatClient({
+        config: {
+            bot_id: '7580535254638755845',
+        },
+        componentProps: {
+            title: 'Coze',
+        },
+        auth: {
+            type: 'token',
+            token: 'pat_xpQ8KuBGPf9KVGg5gOhvUZmefDNc3dbCIgUVZEUBlbPSEtvmLcPUDcI98BIdQH3T',
+            onRefreshToken: function () {
+                return 'pat_xpQ8KuBGPf9KVGg5gOhvUZmefDNc3dbCIgUVZEUBlbPSEtvmLcPUDcI98BIdQH3T'
+            }
+        }
+    });
+</script>
+{%- endif -%}
+{%- if cozy_inline -%}
+{{ cozy_inline }}
+{%- endif -%}
