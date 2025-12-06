@@ -104,32 +104,122 @@ layout: page
 </ul>
 {% endif %}
 
-{%- comment -%}
-Cozy bot: include script only on home layout.
-Use either page.cozy_bot_script (URL) or page.cozy_bot_inline (raw HTML/JS). If not set on page, fall back to site.cozy_bot_script or site.cozy_bot_inline.
-{%- endcomment -%}
-{%- assign cozy_script_url = page.cozy_bot_script | default: site.cozy_bot_script -%}
-{%- assign cozy_inline = page.cozy_bot_inline | default: site.cozy_bot_inline -%}
-{%- if cozy_script_url -%}
-<script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
-<script>
-    new CozeWebSDK.WebChatClient({
-        config: {
-            bot_id: '7580535254638755845',
-        },
-        componentProps: {
-            title: 'Coze',
-        },
-        auth: {
-            type: 'token',
-            token: 'pat_xpQ8KuBGPf9KVGg5gOhvUZmefDNc3dbCIgUVZEUBlbPSEtvmLcPUDcI98BIdQH3T',
-            onRefreshToken: function () {
-                return 'pat_xpQ8KuBGPf9KVGg5gOhvUZmefDNc3dbCIgUVZEUBlbPSEtvmLcPUDcI98BIdQH3T'
-            }
+<style>
+    #vapi-floating-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 15px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    #vapi-floating-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 114, 255, 0.6);
+    }
+
+    /* Trạng thái khi đang gọi (Màu đỏ & Hiệu ứng rung) */
+    #vapi-floating-btn.active {
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+        animation: pulse-red 2s infinite;
+    }
+
+    @keyframes pulse-red {
+        0% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(255, 75, 43, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0); }
+    }
+
+    /* Ẩn trên mobile nếu cần, nhưng voice thì nên để mobile */
+    @media (max-width: 600px) {
+        #vapi-floating-btn {
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            font-size: 14px;
         }
+    }
+</style>
+
+<button id="vapi-floating-btn" onclick="toggleVapiCall()">
+    <span id="vapi-icon">📞</span>
+    <span id="vapi-text">Trợ lý ảo</span>
+</button>
+
+<script src="https://unpkg.com/@vapi-ai/web/dist/vapi-web.js"></script>
+<script>
+    // --- CẤU HÌNH (BẠN ĐIỀN VÀO ĐÂY) ---
+    const VAPI_PUBLIC_KEY = 'b7fd248d-b5de-4f37-ae8e-50f09509e983';
+    const VAPI_ASSISTANT_ID = '4aae4bca-2024-4336-9bdb-6f0627a21280';
+    // -----------------------------------
+
+    const vapi = new Vapi(VAPI_PUBLIC_KEY);
+    const btn = document.getElementById('vapi-floating-btn');
+    const btnText = document.getElementById('vapi-text');
+    const btnIcon = document.getElementById('vapi-icon');
+    let isCallActive = false;
+
+    // Hàm Bật/Tắt cuộc gọi
+    function toggleVapiCall() {
+        if (!isCallActive) {
+            // Bắt đầu gọi
+            btnText.innerText = "Đang kết nối...";
+            vapi.start(VAPI_ASSISTANT_ID);
+        } else {
+            // Kết thúc gọi
+            vapi.stop();
+        }
+    }
+
+    // --- LẮNG NGHE SỰ KIỆN TỪ VAPI ---
+
+    // 1. Khi cuộc gọi bắt đầu
+    vapi.on('call-start', () => {
+        isCallActive = true;
+        btn.classList.add('active'); // Đổi màu đỏ
+        btnIcon.innerText = "mic";   // Đổi icon
+        btnText.innerText = "Đang nghe...";
     });
+
+    // 2. Khi cuộc gọi kết thúc
+    vapi.on('call-end', () => {
+        isCallActive = false;
+        btn.classList.remove('active'); // Về màu xanh
+        btnIcon.innerText = "📞";
+        btnText.innerText = "Trợ lý ảo";
+    });
+
+    // 3. Khi AI đang nói (Speech start)
+    vapi.on('speech-start', () => {
+        btnText.innerText = "AI đang nói...";
+    });
+
+    // 4. Khi AI nói xong (Chờ người dùng nói)
+    vapi.on('speech-end', () => {
+        btnText.innerText = "Mời bạn nói...";
+    });
+
+    // 5. Xử lý lỗi
+    vapi.on('error', (e) => {
+        console.error("Vapi Error:", e);
+        btnText.innerText = "Lỗi kết nối";
+        isCallActive = false;
+        btn.classList.remove('active');
+        setTimeout(() => { btnText.innerText = "Thử lại"; }, 2000);
+    });
+
 </script>
-{%- endif -%}
-{%- if cozy_inline -%}
-{{ cozy_inline }}
-{%- endif -%}
