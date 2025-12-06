@@ -120,8 +120,8 @@ layout: page
     @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.1); } 100% { transform: scale(1); } }
 </style>
 
-<button id="vapi-btn">
-    <span id="vapi-icon">⏳</span>
+<button id="vapi-btn" aria-live="polite" aria-label="Trợ lý ảo">
+    <span id="vapi-icon" aria-hidden="true">⏳</span>
     <span id="vapi-text">Đang tải tài nguyên...</span>
 </button>
 
@@ -135,79 +135,84 @@ layout: page
     const btnText = document.getElementById('vapi-text');
     const btnIcon = document.getElementById('vapi-icon');
 
-    // HÀM KHỞI TẠO SIÊU MẠNH (DYNAMIC IMPORT)
+    // HÀM KHỞI TẠO: Tải SDK động, khởi tạo client, gắn event handlers
     async function initVapi() {
         try {
-            console.log("Bắt đầu tải module Vapi...");
-
-            // 1. Tải module động (Bypass lỗi constructor cũ)
-            // Sử dụng link +esm để đảm bảo trả về chuẩn ES Module
+            // 1) Tải module ở dạng ES Module để tránh lỗi constructor cũ
             const module = await import('https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/+esm');
 
-            console.log("Module đã tải:", module);
+            // 2) Lấy class khởi tạo từ export (default hoặc named)
+            const VapiClass = module?.default || module?.Vapi || module?.WebClient;
+            if (!VapiClass) throw new Error('Không tìm thấy class Vapi trong SDK');
 
-            // 2. Tự động dò tìm Class Vapi (Dù nó nằm ở default hay named export)
-            const VapiClass = module.default || module.Vapi || module.WebClient;
-
-            if (!VapiClass) {
-                throw new Error("Không tìm thấy Class Vapi trong module!");
-            }
-
-            // 3. Khởi tạo
+            // 3) Khởi tạo client
             vapi = new VapiClass(VAPI_PUBLIC_KEY);
-            console.log("Khởi tạo thành công!", vapi);
 
-            // 4. Mở khóa nút
+            // 4) Mở khóa nút
             btn.classList.add('ready');
-            btn.style.background = "#0072ff"; // Xanh hy vọng
-            btnIcon.innerText = "📞";
-            btnText.innerText = "Trợ lý ảo";
+            btnIcon.textContent = '📞';
+            btnText.textContent = 'Trợ lý ảo';
 
             setupEvents();
-
         } catch (err) {
-            console.error("Lỗi chết người:", err);
-            btn.style.background = "#ff0000";
-            btnText.innerText = "Lỗi mạng/Chặn QC";
-            // Hiện thông báo lỗi chi tiết ra console để debug
-            alert("Không tải được Bot. Hãy tắt AdBlock và F5 lại trang.\nLỗi: " + err.message);
+            console.error('[Vapi] Lỗi tải SDK:', err);
+            btn.classList.remove('ready');
+            btn.style.background = '#ff0000';
+            btnIcon.textContent = '❌';
+            btnText.textContent = 'Lỗi mạng/Chặn QC';
+            // Gợi ý khắc phục cho người dùng
+            // eslint-disable-next-line no-alert
+            alert('Không tải được Bot. Hãy tắt AdBlock và F5 lại trang.\nLỗi: ' + (err?.message || err));
         }
     }
 
     function setupEvents() {
-        btn.onclick = () => {
-            if (!btn.classList.contains('ready')) return; // Chặn bấm nếu chưa xong
+        // Toggle gọi / dừng theo trạng thái
+        btn.onclick = async () => {
+            if (!btn.classList.contains('ready')) return;
 
-            if (btn.classList.contains('active')) {
-                vapi.stop();
-            } else {
-                btnText.innerText = "Đang kết nối...";
-                vapi.start(VAPI_ASSISTANT_ID);
+            try {
+                if (btn.classList.contains('active')) {
+                    await vapi?.stop();
+                } else {
+                    btnText.textContent = 'Đang kết nối...';
+                    // API mới: truyền assistantId qua object
+                    await vapi.start({ assistant: VAPI_ASSISTANT_ID });
+                }
+            } catch (err) {
+                console.error('[Vapi] Lỗi khi start/stop:', err);
+                btn.classList.remove('active');
+                btnIcon.textContent = '📞';
+                btnText.textContent = 'Kết nối lại...';
             }
         };
 
+        // Sự kiện vòng đời cuộc gọi
         vapi.on('call-start', () => {
             btn.classList.add('active');
-            btnIcon.innerText = "mic";
-            btnText.innerText = "Đang nghe...";
+            btnIcon.textContent = '🎙️';
+            btnText.textContent = 'Đang nghe...';
         });
 
         vapi.on('call-end', () => {
             btn.classList.remove('active');
-            btnIcon.innerText = "📞";
-            btnText.innerText = "Trợ lý ảo";
+            btnIcon.textContent = '📞';
+            btnText.textContent = 'Trợ lý ảo';
         });
 
-        vapi.on('speech-start', () => btnText.innerText = "AI đang nói...");
-        vapi.on('speech-end', () => btnText.innerText = "Mời bạn nói...");
+        // Sự kiện nói / kết thúc nói của AI
+        vapi.on('speech-start', () => { btnText.textContent = 'AI đang nói...'; });
+        vapi.on('speech-end', () => { btnText.textContent = 'Mời bạn nói...'; });
 
+        // Lỗi runtime (quyền micro, mạng, v.v.)
         vapi.on('error', (e) => {
-            console.error("Vapi Runtime Error:", e);
+            console.error('[Vapi] Runtime Error:', e);
             btn.classList.remove('active');
-            btnText.innerText = "Kết nối lại...";
+            btnIcon.textContent = '⚠️';
+            btnText.textContent = 'Kết nối lại...';
         });
     }
 
-    // Chạy ngay
+    // Khởi chạy ngay sau khi DOM có nút
     initVapi();
 </script>
