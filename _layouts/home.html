@@ -111,37 +111,64 @@ layout: page
         padding: 15px 25px; font-size: 16px; font-weight: bold;
         box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4); cursor: pointer;
         display: flex; align-items: center; gap: 10px; font-family: sans-serif;
-        transition: all 0.3s;
+        transition: all 0.3s; opacity: 0.5; pointer-events: none; /* Khóa nút chờ tải */
     }
-    #vapi-btn:hover { transform: scale(1.05); }
+    #vapi-btn.ready { opacity: 1; pointer-events: auto; background: #00c6ff; }
     #vapi-btn.active { background: #ff4b2b; animation: pulse 2s infinite; }
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 75, 43, 0); } }
 </style>
 
 <button id="vapi-btn">
-    <span id="vapi-icon">📞</span>
-    <span id="vapi-text">Trợ lý ảo (Bấm để gọi)</span>
+    <span id="vapi-icon">⏳</span>
+    <span id="vapi-text">Đang tải Bot...</span>
 </button>
 
-<script type="module">
-    // Dùng import trực tiếp từ CDN (Cách này bypass được nhiều lỗi loader cũ)
-    import Vapi from 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/+esm';
+<script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/vapi-web.js"></script>
 
+<script>
+    // --- CẤU HÌNH ---
     const VAPI_PUBLIC_KEY = 'b7fd248d-b5de-4f37-ae8e-50f09509e983';
     const VAPI_ASSISTANT_ID = '4aae4bca-2024-4336-9bdb-6f0627a21280';
+    // ---------------
 
-    let vapi = null;
-    const btn = document.getElementById('vapi-btn');
-    const btnText = document.getElementById('vapi-text');
-    const btnIcon = document.getElementById('vapi-icon');
+    var vapi = null;
+    var btn = document.getElementById('vapi-btn');
+    var btnText = document.getElementById('vapi-text');
+    var btnIcon = document.getElementById('vapi-icon');
 
-    // Khởi tạo
-    try {
-        vapi = new Vapi(VAPI_PUBLIC_KEY);
-        console.log("Vapi Module đã tải thành công!");
+    // Hàm kiểm tra và khởi tạo
+    function initVapiSystem() {
+        // Kiểm tra xem thư viện đã vào window chưa
+        if (!window.Vapi) {
+            console.log("Đang đợi thư viện Vapi...");
+            // Thử lại sau 500ms nếu mạng chậm
+            setTimeout(initVapiSystem, 500);
+            return;
+        }
 
-        // Xử lý sự kiện bấm nút
-        btn.onclick = () => {
+        try {
+            console.log("Tìm thấy thư viện Vapi!", window.Vapi);
+
+            // KHỞI TẠO: Gọi trực tiếp từ window để tránh nhầm lẫn
+            vapi = new window.Vapi(VAPI_PUBLIC_KEY);
+
+            // Mở khóa nút
+            btn.classList.add('ready');
+            btnIcon.innerText = "📞";
+            btnText.innerText = "Trợ lý ảo";
+            console.log("Vapi khởi động thành công!");
+
+            setupEvents();
+
+        } catch (err) {
+            console.error("Lỗi khởi tạo nghiêm trọng:", err);
+            btnText.innerText = "Lỗi Code";
+            alert("Chi tiết lỗi: " + err.message);
+        }
+    }
+
+    function setupEvents() {
+        btn.onclick = function() {
             if (btn.classList.contains('active')) {
                 vapi.stop();
             } else {
@@ -150,7 +177,6 @@ layout: page
             }
         };
 
-        // Lắng nghe sự kiện
         vapi.on('call-start', () => {
             btn.classList.add('active');
             btnIcon.innerText = "mic";
@@ -167,13 +193,13 @@ layout: page
         vapi.on('speech-end', () => btnText.innerText = "Mời bạn nói...");
 
         vapi.on('error', (e) => {
-            console.error(e);
-            btnText.innerText = "Lỗi kết nối";
+            console.error("Vapi Error:", e);
             btn.classList.remove('active');
+            btnText.innerText = "Lỗi kết nối";
         });
-
-    } catch (err) {
-        console.error("Lỗi khởi tạo Vapi:", err);
-        btnText.innerText = "Lỗi tải Module";
     }
+
+    // Chạy hàm khởi tạo sau khi trang load xong
+    window.onload = initVapiSystem;
+
 </script>
