@@ -107,68 +107,77 @@ layout: page
 <style>
     #vapi-btn {
         position: fixed; bottom: 30px; right: 30px; z-index: 99999;
-        background: #0072ff; color: white; border: none; border-radius: 50px;
+        background: #4a4a4a; /* Màu xám chờ đợi */
+        color: white; border: none; border-radius: 50px;
         padding: 15px 25px; font-size: 16px; font-weight: bold;
-        box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4); cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: not-allowed;
         display: flex; align-items: center; gap: 10px; font-family: sans-serif;
-        transition: all 0.3s; opacity: 0.5; pointer-events: none; /* Khóa nút chờ tải */
+        transition: all 0.3s; opacity: 0.8;
     }
-    #vapi-btn.ready { opacity: 1; pointer-events: auto; background: #00c6ff; }
+    #vapi-btn.ready { background: #0072ff; cursor: pointer; opacity: 1; animation: popIn 0.5s; }
     #vapi-btn.active { background: #ff4b2b; animation: pulse 2s infinite; }
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 75, 43, 0); } }
+    @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.1); } 100% { transform: scale(1); } }
 </style>
 
 <button id="vapi-btn">
     <span id="vapi-icon">⏳</span>
-    <span id="vapi-text">Đang tải Bot...</span>
+    <span id="vapi-text">Đang tải tài nguyên...</span>
 </button>
 
-<script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/vapi-web.js"></script>
-
-<script>
-    // --- CẤU HÌNH ---
+<script type="module">
+    // CẤU HÌNH KEY CỦA BẠN
     const VAPI_PUBLIC_KEY = 'b7fd248d-b5de-4f37-ae8e-50f09509e983';
     const VAPI_ASSISTANT_ID = '4aae4bca-2024-4336-9bdb-6f0627a21280';
-    // ---------------
 
-    var vapi = null;
-    var btn = document.getElementById('vapi-btn');
-    var btnText = document.getElementById('vapi-text');
-    var btnIcon = document.getElementById('vapi-icon');
+    let vapi = null;
+    const btn = document.getElementById('vapi-btn');
+    const btnText = document.getElementById('vapi-text');
+    const btnIcon = document.getElementById('vapi-icon');
 
-    // Hàm kiểm tra và khởi tạo
-    function initVapiSystem() {
-        // Kiểm tra xem thư viện đã vào window chưa
-        if (!window.Vapi) {
-            console.log("Đang đợi thư viện Vapi...");
-            // Thử lại sau 500ms nếu mạng chậm
-            setTimeout(initVapiSystem, 500);
-            return;
-        }
-
+    // HÀM KHỞI TẠO SIÊU MẠNH (DYNAMIC IMPORT)
+    async function initVapi() {
         try {
-            console.log("Tìm thấy thư viện Vapi!", window.Vapi);
+            console.log("Bắt đầu tải module Vapi...");
 
-            // KHỞI TẠO: Gọi trực tiếp từ window để tránh nhầm lẫn
-            vapi = new window.Vapi(VAPI_PUBLIC_KEY);
+            // 1. Tải module động (Bypass lỗi constructor cũ)
+            // Sử dụng link +esm để đảm bảo trả về chuẩn ES Module
+            const module = await import('https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/+esm');
 
-            // Mở khóa nút
+            console.log("Module đã tải:", module);
+
+            // 2. Tự động dò tìm Class Vapi (Dù nó nằm ở default hay named export)
+            const VapiClass = module.default || module.Vapi || module.WebClient;
+
+            if (!VapiClass) {
+                throw new Error("Không tìm thấy Class Vapi trong module!");
+            }
+
+            // 3. Khởi tạo
+            vapi = new VapiClass(VAPI_PUBLIC_KEY);
+            console.log("Khởi tạo thành công!", vapi);
+
+            // 4. Mở khóa nút
             btn.classList.add('ready');
+            btn.style.background = "#0072ff"; // Xanh hy vọng
             btnIcon.innerText = "📞";
             btnText.innerText = "Trợ lý ảo";
-            console.log("Vapi khởi động thành công!");
 
             setupEvents();
 
         } catch (err) {
-            console.error("Lỗi khởi tạo nghiêm trọng:", err);
-            btnText.innerText = "Lỗi Code";
-            alert("Chi tiết lỗi: " + err.message);
+            console.error("Lỗi chết người:", err);
+            btn.style.background = "#ff0000";
+            btnText.innerText = "Lỗi mạng/Chặn QC";
+            // Hiện thông báo lỗi chi tiết ra console để debug
+            alert("Không tải được Bot. Hãy tắt AdBlock và F5 lại trang.\nLỗi: " + err.message);
         }
     }
 
     function setupEvents() {
-        btn.onclick = function() {
+        btn.onclick = () => {
+            if (!btn.classList.contains('ready')) return; // Chặn bấm nếu chưa xong
+
             if (btn.classList.contains('active')) {
                 vapi.stop();
             } else {
@@ -193,13 +202,12 @@ layout: page
         vapi.on('speech-end', () => btnText.innerText = "Mời bạn nói...");
 
         vapi.on('error', (e) => {
-            console.error("Vapi Error:", e);
+            console.error("Vapi Runtime Error:", e);
             btn.classList.remove('active');
-            btnText.innerText = "Lỗi kết nối";
+            btnText.innerText = "Kết nối lại...";
         });
     }
 
-    // Chạy hàm khởi tạo sau khi trang load xong
-    window.onload = initVapiSystem;
-
+    // Chạy ngay
+    initVapi();
 </script>
