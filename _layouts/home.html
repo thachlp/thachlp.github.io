@@ -103,116 +103,20 @@ layout: page
   {% endif %}
 </ul>
 {% endif %}
-
-<style>
-    #vapi-btn {
-        position: fixed; bottom: 30px; right: 30px; z-index: 99999;
-        background: #4a4a4a; /* Màu xám chờ đợi */
-        color: white; border: none; border-radius: 50px;
-        padding: 15px 25px; font-size: 16px; font-weight: bold;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: not-allowed;
-        display: flex; align-items: center; gap: 10px; font-family: sans-serif;
-        transition: all 0.3s; opacity: 0.8;
-    }
-    #vapi-btn.ready { background: #0072ff; cursor: pointer; opacity: 1; animation: popIn 0.5s; }
-    #vapi-btn.active { background: #ff4b2b; animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 75, 43, 0); } }
-    @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.1); } 100% { transform: scale(1); } }
-</style>
-
-<button id="vapi-btn" aria-live="polite" aria-label="Trợ lý ảo">
-    <span id="vapi-icon" aria-hidden="true">⏳</span>
-    <span id="vapi-text">Đang tải tài nguyên...</span>
-</button>
-
-<script type="module">
-    // CẤU HÌNH KEY CỦA BẠN
-    const VAPI_PUBLIC_KEY = 'b7fd248d-b5de-4f37-ae8e-50f09509e983';
-    const VAPI_ASSISTANT_ID = '4aae4bca-2024-4336-9bdb-6f0627a21280';
-
-    let vapi = null;
-    const btn = document.getElementById('vapi-btn');
-    const btnText = document.getElementById('vapi-text');
-    const btnIcon = document.getElementById('vapi-icon');
-
-    // HÀM KHỞI TẠO: Tải SDK động, khởi tạo client, gắn event handlers
-    async function initVapi() {
-        try {
-            // 1) Tải module ở dạng ES Module để tránh lỗi constructor cũ
-            const module = await import('https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/+esm');
-
-            // 2) Lấy class khởi tạo từ export (default hoặc named)
-            const VapiClass = module?.default || module?.Vapi || module?.WebClient;
-            if (!VapiClass) throw new Error('Không tìm thấy class Vapi trong SDK');
-
-            // 3) Khởi tạo client
-            vapi = new VapiClass(VAPI_PUBLIC_KEY);
-
-            // 4) Mở khóa nút
-            btn.classList.add('ready');
-            btnIcon.textContent = '📞';
-            btnText.textContent = 'Trợ lý ảo';
-
-            setupEvents();
-        } catch (err) {
-            console.error('[Vapi] Lỗi tải SDK:', err);
-            btn.classList.remove('ready');
-            btn.style.background = '#ff0000';
-            btnIcon.textContent = '❌';
-            btnText.textContent = 'Lỗi mạng/Chặn QC';
-            // Gợi ý khắc phục cho người dùng
-            // eslint-disable-next-line no-alert
-            alert('Không tải được Bot. Hãy tắt AdBlock và F5 lại trang.\nLỗi: ' + (err?.message || err));
-        }
-    }
-
-    function setupEvents() {
-        // Toggle gọi / dừng theo trạng thái
-        btn.onclick = async () => {
-            if (!btn.classList.contains('ready')) return;
-
-            try {
-                if (btn.classList.contains('active')) {
-                    await vapi?.stop();
-                } else {
-                    btnText.textContent = 'Đang kết nối...';
-                    // API mới: truyền assistantId qua object
-                    await vapi.start({ assistant: VAPI_ASSISTANT_ID });
-                }
-            } catch (err) {
-                console.error('[Vapi] Lỗi khi start/stop:', err);
-                btn.classList.remove('active');
-                btnIcon.textContent = '📞';
-                btnText.textContent = 'Kết nối lại...';
-            }
-        };
-
-        // Sự kiện vòng đời cuộc gọi
-        vapi.on('call-start', () => {
-            btn.classList.add('active');
-            btnIcon.textContent = '🎙️';
-            btnText.textContent = 'Đang nghe...';
+<!-- Voiceflow chat widget: loads only on home layout -->
+<script type="text/javascript">
+  (function(d, t) {
+      var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+      v.onload = function() {
+        window.voiceflow.chat.load({
+          verify: { projectID: '6933c078ed72408e2affe6d1' },
+          url: 'https://general-runtime.voiceflow.com',
+          versionID: 'production',
+          voice: {
+            url: "https://runtime-api.voiceflow.com"
+          }
         });
-
-        vapi.on('call-end', () => {
-            btn.classList.remove('active');
-            btnIcon.textContent = '📞';
-            btnText.textContent = 'Trợ lý ảo';
-        });
-
-        // Sự kiện nói / kết thúc nói của AI
-        vapi.on('speech-start', () => { btnText.textContent = 'AI đang nói...'; });
-        vapi.on('speech-end', () => { btnText.textContent = 'Mời bạn nói...'; });
-
-        // Lỗi runtime (quyền micro, mạng, v.v.)
-        vapi.on('error', (e) => {
-            console.error('[Vapi] Runtime Error:', e);
-            btn.classList.remove('active');
-            btnIcon.textContent = '⚠️';
-            btnText.textContent = 'Kết nối lại...';
-        });
-    }
-
-    // Khởi chạy ngay sau khi DOM có nút
-    initVapi();
+      }
+      v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+  })(document, 'script');
 </script>
